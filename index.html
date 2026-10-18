@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shinobi Hands V1.4 — Modo Just Dance &amp; Kinect Assist</title>
+  </head>
+  <body>
+    <div id="app" class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-emblem" aria-hidden="true">忍</div>
+          <div>
+            <div class="brand-eyebrow">ALEST LABS · SHINOBI HANDS V1.4 (JUST DANCE EDITION)</div>
+            <h1 class="brand-title">Arena Just Dance de Jutsus &amp; Kinect Assist</h1>
+          </div>
+        </div>
+
+        <div class="topbar-controls">
+          <div class="score-pill" title="Pontuação e sequência de acertos estilo Just Dance">
+            <span id="playerScoreText">⭐ 0 pts</span>
+            <span class="score-divider">·</span>
+            <span id="playerStreakText">🔥 0x</span>
+          </div>
+
+          <div id="trackingStatusBadge" class="status-pill status-idle">
+            <span class="status-dot"></span>
+            <span id="trackingStatusText">Câmera Desligada</span>
+          </div>
+
+          <label class="gate-speed-control" for="gameModeSelect" title="Escolha entre o Modo Guiado estilo Just Dance/Kinect ou Modo Livre">
+            <span>Modo:</span>
+            <select id="gameModeSelect" aria-label="Modo de Jogo">
+              <option value="just-dance" selected>🕺 Just Dance (Guiado + Kinect Assist)</option>
+              <option value="free-sandbox">🔬 Livre (Sandbox Puro)</option>
+            </select>
+          </label>
+
+          <label class="gate-speed-control" for="handModeSelect" title="Modo de detecção da união das duas mãos">
+            <span>Mãos:</span>
+            <select id="handModeSelect" aria-label="Modo de união das mãos">
+              <option value="clasped-hybrid" selected>Fusão 2 Mãos + Tolerância</option>
+              <option value="strict-dual">Estrito (2 Mãos Visíveis)</option>
+            </select>
+          </label>
+
+          <label class="gate-speed-control" for="gateSpeedSelect">
+            <span>Gate:</span>
+            <select id="gateSpeedSelect" aria-label="Tempo de confirmação do selo">
+              <option value="150" selected>Ninja Instantâneo (150ms)</option>
+              <option value="280">Rápido (280ms)</option>
+              <option value="420">Normal (420ms)</option>
+              <option value="600">Preciso (600ms)</option>
+            </select>
+          </label>
+
+          <button id="toggleAudioBtn" type="button" class="btn btn-secondary" title="Alternar som de Chakra">
+            🔊 Som Ativo
+          </button>
+
+          <button id="toggleCameraBtn" type="button" class="btn btn-primary">
+            📷 Iniciar Câmera Ninja
+          </button>
+        </div>
+      </header>
+
+      <main class="workspace-grid">
+        <!-- Coluna Esquerda/Central: Viewport da Câmera + HUD + Esteira Just Dance -->
+        <section class="stage-column" aria-label="Arena de Visão Computacional">
+          <div class="viewport-card">
+            <video
+              id="webcamVideo"
+              class="webcam-video"
+              playsinline
+              muted
+              autoplay
+            ></video>
+            <canvas id="hudCanvas" class="hud-canvas"></canvas>
+
+            <!-- Placeholder quando a câmera está desligada -->
+            <div id="cameraPlaceholder" class="camera-placeholder">
+              <div class="placeholder-kanji">印</div>
+              <h2>Modo Just Dance Shinobi (Com Kinect Assist!)</h2>
+              <p>
+                Um Jutsu aparece na tela e você executa os selos na sequência até ele disparar!
+                Com a filosofia <strong>Xbox Kinect Assist</strong>, o motor já sabe qual selo você está tentando fazer,
+                dá uma ajuda generosa contra oclusões e não deixa selos errados atrapalharem seu combo!
+              </p>
+              <div class="placeholder-actions">
+                <button id="startCameraHeroBtn" type="button" class="btn btn-primary btn-lg">
+                  🕺 Iniciar Arena Just Dance
+                </button>
+              </div>
+              <p class="placeholder-subtext">
+                Dica: Você também pode clicar nos cards ou usar as teclas <kbd>1</kbd> a <kbd>7</kbd> para testar a coreografia!
+              </p>
+            </div>
+
+            <!-- Telemetria em Tempo Real no Topo do Vídeo -->
+            <div class="hud-overlay-top">
+              <div class="telemetry-box">
+                <div id="telemetryHeaderLabel" class="telemetry-label">ALVO ATUAL (KINECT ASSIST ATIVO)</div>
+                <div class="telemetry-main">
+                  <span id="currentSealEmoji" class="telemetry-emoji">—</span>
+                  <div>
+                    <div id="currentSealName" class="telemetry-name">Aguardando mãos</div>
+                    <div id="currentSealConfidence" class="telemetry-sub">Faça a pose do card em destaque!</div>
+                  </div>
+                </div>
+                <div class="gate-progress-track" title="Progresso de confirmação do Selo">
+                  <div id="gateProgressBar" class="gate-progress-fill" style="width: 0%"></div>
+                </div>
+              </div>
+
+              <div class="telemetry-box telemetry-fingers">
+                <div class="telemetry-label">LEITURA BIOMECÂNICA (MÃOS + BRAÇOS)</div>
+                <div id="fingerPillsContainer" class="finger-pills">
+                  <span data-finger="thumb" class="finger-pill">Polegar</span>
+                  <span data-finger="index" class="finger-pill">Indicador</span>
+                  <span data-finger="middle" class="finger-pill">Médio</span>
+                  <span data-finger="ring" class="finger-pill">Anelar</span>
+                  <span data-finger="pinky" class="finger-pill">Mínimo</span>
+                </div>
+                <div id="dualHandBadge" class="dual-hand-indicator">
+                  👐 Modo: Aguardando união das mãos
+                </div>
+              </div>
+            </div>
+
+            <!-- Pop-up Neon Estilo Just Dance (PERFECT! / GREAT!) -->
+            <div id="danceJudgmentPopup" class="dance-judgment-popup hidden" aria-live="polite">
+              <span id="danceJudgmentText">★ PERFECT! +300</span>
+            </div>
+
+            <!-- Banner de Calibração Few-Shot -->
+            <div id="calibrationOverlay" class="calibration-overlay hidden" role="status" aria-live="assertive">
+              <div class="calibration-box">
+                <span class="section-tag">TREINAMENTO NEURAL FEW-SHOT (3D + ROI VISUAL)</span>
+                <h3 id="calibrationTitle">Junte as 2 mãos no selo TIGRE...</h3>
+                <p id="calibrationSubtitle">Mantenha as duas mãos conectadas na frente do peito por 1,5 segundo.</p>
+                <div class="gate-progress-track">
+                  <div id="calibrationProgressBar" class="gate-progress-fill" style="width: 0%"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Banner Cinemático de Ativação de Jutsu -->
+            <div id="jutsuBanner" class="jutsu-banner hidden" role="status" aria-live="polite">
+              <div class="jutsu-banner-inner">
+                <span id="jutsuBannerElement" class="jutsu-banner-element">KATON</span>
+                <h2 id="jutsuBannerNameJp" class="jutsu-banner-jp">Katon: Gōkakyū no Jutsu!</h2>
+                <p id="jutsuBannerNamePt" class="jutsu-banner-pt">Estilo Fogo: Jutsu Bola de Fogo</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Painel Coreográfico Just Dance + Deck de Selos -->
+          <div class="combo-panel">
+            <!-- Esteira Coreográfica do Modo Just Dance -->
+            <div id="justDanceStagePanel" class="just-dance-panel">
+              <div class="just-dance-header">
+                <div class="just-dance-title-group">
+                  <span class="section-tag">🕺 COREOGRAFIA ATUAL — FAÇA OS SELOS NA ORDEM ATÉ O JUTSU SAIR!</span>
+                  <div class="just-dance-jutsu-headline">
+                    <h3 id="targetJutsuTitle">Estilo Fogo: Jutsu Bola de Fogo</h3>
+                    <span id="targetJutsuSubtitle" class="just-dance-element-badge">Katon: Gōkakyū no Jutsu · RANK C</span>
+                  </div>
+                </div>
+                <div class="just-dance-controls">
+                  <button id="prevJutsuBtn" type="button" class="btn btn-ghost btn-sm" title="Jutsu Anterior">
+                    ◀ Anterior
+                  </button>
+                  <button id="randomJutsuBtn" type="button" class="btn btn-secondary btn-sm" title="Sortear Jutsu">
+                    🎲 Sortear
+                  </button>
+                  <button id="nextJutsuBtn" type="button" class="btn btn-ghost btn-sm" title="Próximo Jutsu">
+                    Próximo ▶
+                  </button>
+                </div>
+              </div>
+
+              <!-- Cards Grandes Passo-a-Passo da Sequência Atual -->
+              <div id="justDanceStepsContainer" class="just-dance-steps-track" aria-live="polite"></div>
+            </div>
+
+            <!-- Barra de Sequência Livre (visível no Modo Sandbox Livre) -->
+            <div id="freeComboSection" class="free-combo-section hidden">
+              <div class="combo-header">
+                <div>
+                  <span class="section-tag">BUFFER DE SEQUÊNCIA LIVRE</span>
+                  <h3 class="combo-title">Selos Confirmados no Combo Atual</h3>
+                </div>
+                <div class="combo-actions">
+                  <div class="timeout-meter" title="Tempo restante antes da sequência expirar">
+                    <div id="comboTimeoutBar" class="timeout-fill" style="width: 0%"></div>
+                  </div>
+                  <button id="clearComboBtn" type="button" class="btn btn-ghost btn-sm">
+                    Limpar Combo (R)
+                  </button>
+                </div>
+              </div>
+              <div id="activeSequenceSlots" class="sequence-slots" aria-live="polite"></div>
+            </div>
+
+            <!-- Barra de Simulação Rápida + Botões de Calibração Dual-Hand -->
+            <div class="seal-deck-section">
+              <div class="seal-deck-header">
+                <span>DECK DOS 7 SELOS (CLIQUE PARA TESTAR OU EM "🎯 CALIBRAR 2 MÃOS")</span>
+                <button id="resetCalibrationBtn" type="button" class="btn btn-ghost btn-sm" title="Apagar calibrações salvas">
+                  Resetar IA Calibrada
+                </button>
+              </div>
+              <div id="sealDeckGrid" class="seal-deck-grid"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Coluna Direita: Grimório de Jutsus + Histórico -->
+        <aside class="grimoire-column" aria-label="Pergaminho de Jutsus">
+          <div class="panel-card">
+            <div class="panel-header">
+              <span class="section-tag">ESCOLHA SUA COREOGRAFIA</span>
+              <h2>Grimório de Jutsus</h2>
+              <p class="panel-subtitle">
+                Clique em qualquer Jutsu abaixo para colocá-lo no palco do <strong>Modo Just Dance</strong> (ou jogue em sequência automática!).
+              </p>
+            </div>
+            <div id="jutsuListContainer" class="jutsu-list"></div>
+          </div>
+
+          <div class="panel-card history-card">
+            <div class="panel-header">
+              <span class="section-tag">LOG DE COMBATE</span>
+              <h2>Jutsus Lançados na Sessão</h2>
+            </div>
+            <div id="jutsuHistoryContainer" class="history-list">
+              <p class="empty-history">Nenhum Jutsu lançado ainda. Complete a coreografia acima!</p>
+            </div>
+          </div>
+        </aside>
+      </main>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
