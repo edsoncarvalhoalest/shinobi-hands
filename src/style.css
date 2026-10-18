@@ -1,0 +1,1027 @@
+:root {
+  --bg-deep: #070b14;
+  --bg-card: rgba(15, 23, 42, 0.82);
+  --bg-card-elevated: rgba(30, 41, 59, 0.72);
+  --border-subtle: rgba(148, 163, 184, 0.16);
+  --border-accent: rgba(255, 107, 43, 0.45);
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --accent-orange: #ff6b2b;
+  --accent-cyan: #38bdf8;
+  --accent-gold: #facc15;
+  --accent-emerald: #22c55e;
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: radial-gradient(circle at 15% 15%, #131c31 0%, var(--bg-deep) 65%);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.app-shell {
+  max-width: 1560px;
+  margin: 0 auto;
+  padding: 16px 20px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Topbar */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 14px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-emblem {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ff6b2b 0%, #e11d48 100%);
+  display: grid;
+  place-items: center;
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #fff;
+  box-shadow: 0 0 20px rgba(255, 107, 43, 0.45);
+}
+
+.brand-eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-orange);
+  font-weight: 700;
+}
+
+.brand-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.topbar-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 13px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: rgba(30, 41, 59, 0.85);
+  border: 1px solid var(--border-subtle);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #64748b;
+}
+
+.status-active .status-dot {
+  background: var(--accent-emerald);
+  box-shadow: 0 0 10px var(--accent-emerald);
+}
+
+.gate-speed-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  background: rgba(15, 23, 42, 0.9);
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border-subtle);
+}
+
+.gate-speed-control select {
+  background: transparent;
+  color: var(--text-main);
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+}
+
+.gate-speed-control select option {
+  background: #0f172a;
+  color: #f8fafc;
+}
+
+.btn {
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 9px 15px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--text-main);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #ff6b2b 0%, #ea580c 100%);
+  box-shadow: 0 4px 16px rgba(255, 107, 43, 0.35);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(255, 107, 43, 0.5);
+}
+
+.btn-secondary {
+  background: rgba(30, 41, 59, 0.9);
+  border-color: var(--border-subtle);
+}
+
+.btn-secondary:hover {
+  border-color: var(--accent-cyan);
+}
+
+.btn-ghost {
+  background: rgba(30, 41, 59, 0.55);
+  border-color: var(--border-subtle);
+  color: var(--text-muted);
+}
+
+.btn-ghost:hover {
+  color: var(--text-main);
+  border-color: var(--accent-orange);
+}
+
+.btn-lg {
+  padding: 13px 24px;
+  font-size: 0.98rem;
+}
+
+.btn-sm {
+  padding: 6px 11px;
+  font-size: 0.78rem;
+}
+
+/* Main Grid */
+.workspace-grid {
+  display: grid;
+  grid-template-columns: 1fr 430px;
+  gap: 18px;
+  align-items: start;
+}
+
+@media (max-width: 1120px) {
+  .workspace-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stage-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Camera Viewport */
+.viewport-card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  min-height: 420px;
+  background: #050811;
+  border-radius: 18px;
+  border: 1px solid var(--border-subtle);
+  overflow: hidden;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.55);
+}
+
+.webcam-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+  display: block;
+}
+
+.hud-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.camera-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 32px;
+  background: radial-gradient(circle at center, rgba(15, 23, 42, 0.9) 0%, rgba(5, 8, 17, 0.98) 100%);
+  z-index: 4;
+  gap: 12px;
+}
+
+.camera-placeholder.hidden {
+  display: none;
+}
+
+.placeholder-kanji {
+  width: 72px;
+  height: 72px;
+  border-radius: 20px;
+  background: rgba(255, 107, 43, 0.14);
+  border: 1px solid var(--border-accent);
+  color: var(--accent-orange);
+  font-size: 2.3rem;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  margin-bottom: 4px;
+}
+
+.camera-placeholder h2 {
+  font-size: 1.4rem;
+}
+
+.camera-placeholder p {
+  max-width: 560px;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.placeholder-subtext {
+  font-size: 0.82rem !important;
+  opacity: 0.85;
+}
+
+kbd {
+  background: rgba(30, 41, 59, 0.9);
+  border: 1px solid var(--border-subtle);
+  border-radius: 5px;
+  padding: 2px 6px;
+  font-size: 0.76rem;
+}
+
+/* Telemetry Overlay */
+.hud-overlay-top {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  right: 14px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  pointer-events: none;
+  z-index: 5;
+  flex-wrap: wrap;
+}
+
+.telemetry-box {
+  background: rgba(7, 11, 20, 0.82);
+  border: 1px solid var(--border-subtle);
+  backdrop-filter: blur(10px);
+  border-radius: 13px;
+  padding: 10px 14px;
+  min-width: 220px;
+}
+
+.telemetry-label {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.telemetry-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.telemetry-emoji {
+  font-size: 1.85rem;
+}
+
+.telemetry-name {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.telemetry-sub {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+.gate-progress-track {
+  margin-top: 8px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(51, 65, 85, 0.7);
+  overflow: hidden;
+}
+
+.gate-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-orange), var(--accent-gold));
+  transition: width 0.06s linear;
+}
+
+.finger-pills {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.finger-pill {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: rgba(30, 41, 59, 0.8);
+  color: var(--text-muted);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  transition: all 0.12s ease;
+}
+
+.finger-pill.extended {
+  background: rgba(56, 189, 248, 0.22);
+  color: #e0f2fe;
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+}
+
+.dual-hand-indicator {
+  margin-top: 7px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.dual-hand-indicator.resonant {
+  color: var(--accent-gold);
+}
+
+/* Jutsu Cinematic Banner */
+.jutsu-banner {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle, rgba(255, 107, 43, 0.28) 0%, rgba(7, 11, 20, 0.75) 85%);
+  z-index: 8;
+  pointer-events: none;
+  animation: bannerPop 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.jutsu-banner.hidden {
+  display: none;
+}
+
+.jutsu-banner-inner {
+  text-align: center;
+  padding: 26px 42px;
+  border-radius: 20px;
+  background: rgba(7, 11, 20, 0.92);
+  border: 2px solid var(--accent-gold);
+  box-shadow: 0 0 50px rgba(255, 107, 43, 0.65);
+}
+
+.jutsu-banner-element {
+  display: inline-block;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(255, 107, 43, 0.2);
+  color: var(--accent-gold);
+  margin-bottom: 8px;
+}
+
+.jutsu-banner-jp {
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+  text-shadow: 0 0 18px rgba(255, 107, 43, 0.8);
+}
+
+.jutsu-banner-pt {
+  font-size: 1.05rem;
+  color: var(--accent-gold);
+  margin-top: 4px;
+  font-weight: 600;
+}
+
+@keyframes bannerPop {
+  from {
+    opacity: 0;
+    transform: scale(0.86);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Combo Panel */
+.combo-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.combo-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.section-tag {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--accent-orange);
+  text-transform: uppercase;
+}
+
+.combo-title {
+  font-size: 1.02rem;
+  margin-top: 2px;
+}
+
+.combo-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.timeout-meter {
+  width: 110px;
+  height: 7px;
+  background: rgba(30, 41, 59, 0.9);
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+}
+
+.timeout-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-emerald));
+  transition: width 0.1s linear;
+}
+
+.sequence-slots {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 68px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(7, 11, 20, 0.65);
+  border: 1px dashed rgba(148, 163, 184, 0.25);
+  overflow-x: auto;
+}
+
+.sequence-empty {
+  color: var(--text-muted);
+  font-size: 0.86rem;
+}
+
+.sequence-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: rgba(30, 41, 59, 0.95);
+  border: 1px solid var(--accent-orange);
+  font-weight: 700;
+  font-size: 0.9rem;
+  animation: chipAppear 0.18s ease-out;
+}
+
+.sequence-arrow {
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+@keyframes chipAppear {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Seal Deck */
+.seal-deck-header {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.seal-deck-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(110px, 1fr));
+  gap: 8px;
+}
+
+@media (max-width: 900px) {
+  .seal-deck-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+}
+
+.seal-card-btn {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid var(--border-subtle);
+  border-radius: 11px;
+  padding: 9px 8px;
+  text-align: left;
+  color: var(--text-main);
+  transition: all 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.seal-card-clickable {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.seal-card-btn:hover {
+  border-color: var(--accent-cyan);
+  transform: translateY(-2px);
+}
+
+.seal-card-btn.active-detected {
+  border-color: var(--accent-gold);
+  background: rgba(250, 204, 21, 0.14);
+  box-shadow: 0 0 16px rgba(250, 204, 21, 0.28);
+}
+
+.seal-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.seal-card-kanji {
+  font-size: 0.75rem;
+  padding: 1px 6px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--accent-gold);
+}
+
+.seal-card-hint {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  line-height: 1.3;
+}
+
+.seal-card-footer {
+  margin-top: 2px;
+}
+
+.calibrate-mini-btn {
+  width: 100%;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  background: rgba(56, 189, 248, 0.12);
+  color: #bae6fd;
+  border-radius: 7px;
+  padding: 5px 6px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.calibrate-mini-btn:hover {
+  background: rgba(56, 189, 248, 0.28);
+  border-color: var(--accent-cyan);
+}
+
+.calibrate-mini-btn.calibrated {
+  border-color: rgba(34, 197, 94, 0.45);
+  background: rgba(34, 197, 94, 0.16);
+  color: #bbf7d0;
+}
+
+/* Calibration Overlay */
+.calibration-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(7, 11, 20, 0.78);
+  backdrop-filter: blur(6px);
+  z-index: 9;
+}
+
+.calibration-overlay.hidden {
+  display: none;
+}
+
+.calibration-box {
+  max-width: 440px;
+  width: 90%;
+  background: rgba(15, 23, 42, 0.96);
+  border: 2px solid var(--accent-cyan);
+  border-radius: 16px;
+  padding: 22px 26px;
+  text-align: center;
+  box-shadow: 0 0 40px rgba(56, 189, 248, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.calibration-box h3 {
+  font-size: 1.2rem;
+}
+
+.calibration-box p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* Right Column: Grimoire */
+.grimoire-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.panel-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  padding: 16px 18px;
+}
+
+.panel-header h2 {
+  font-size: 1.08rem;
+  margin-top: 2px;
+}
+
+.panel-subtitle {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+.jutsu-list {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.jutsu-card {
+  background: rgba(7, 11, 20, 0.72);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 12px 14px;
+  transition: all 0.18s ease;
+  cursor: pointer;
+}
+
+.jutsu-card:hover {
+  border-color: rgba(56, 189, 248, 0.55);
+  transform: translateY(-1px);
+}
+
+.jutsu-card.in-progress {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.18);
+}
+
+.jutsu-card.selected-dance-target {
+  border-color: var(--accent-gold);
+  background: linear-gradient(135deg, rgba(250, 204, 21, 0.16), rgba(56, 189, 248, 0.08));
+  box-shadow: 0 0 22px rgba(250, 204, 21, 0.25);
+}
+
+.jutsu-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.jutsu-title-pt {
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+
+.jutsu-title-jp {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.jutsu-rank-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(255, 107, 43, 0.18);
+  color: var(--accent-orange);
+  border: 1px solid rgba(255, 107, 43, 0.35);
+}
+
+.jutsu-recipe-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.recipe-step-pill {
+  font-size: 0.74rem;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: 7px;
+  background: rgba(30, 41, 59, 0.85);
+  color: var(--text-muted);
+  border: 1px solid transparent;
+}
+
+.recipe-step-pill.step-done {
+  background: rgba(34, 197, 94, 0.2);
+  color: #bbf7d0;
+  border-color: var(--accent-emerald);
+}
+
+.recipe-step-pill.step-next {
+  background: rgba(250, 204, 21, 0.2);
+  color: #fef08a;
+  border-color: var(--accent-gold);
+}
+
+/* History */
+.history-list {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.empty-history {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 9px;
+  background: rgba(7, 11, 20, 0.7);
+  border-left: 3px solid var(--accent-orange);
+  font-size: 0.82rem;
+}
+
+.history-item-time {
+  color: var(--text-muted);
+  font-size: 0.74rem;
+}
+
+/* Just Dance Mode & Scoreboard */
+.score-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 13px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(250, 204, 21, 0.18), rgba(249, 115, 22, 0.18));
+  border: 1px solid rgba(250, 204, 21, 0.45);
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #fef08a;
+}
+
+.score-divider {
+  opacity: 0.5;
+}
+
+.just-dance-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.just-dance-panel.hidden,
+.free-combo-section.hidden {
+  display: none;
+}
+
+.just-dance-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.just-dance-jutsu-headline {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 2px;
+}
+
+.just-dance-jutsu-headline h3 {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #ffffff;
+}
+
+.just-dance-element-badge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.16);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: #bae6fd;
+}
+
+.just-dance-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.just-dance-steps-track {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+  gap: 10px;
+}
+
+.dance-step-card {
+  position: relative;
+  border-radius: 14px;
+  padding: 12px;
+  background: rgba(15, 23, 42, 0.82);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.dance-step-card.step-completed {
+  background: rgba(34, 197, 94, 0.16);
+  border-color: #22c55e;
+  opacity: 0.9;
+}
+
+.dance-step-card.step-current {
+  background: linear-gradient(145deg, rgba(250, 204, 21, 0.22), rgba(56, 189, 248, 0.15));
+  border: 2px solid var(--accent-gold);
+  box-shadow: 0 0 24px rgba(250, 204, 21, 0.32);
+  transform: translateY(-2px);
+}
+
+.dance-step-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.dance-step-card.step-current .dance-step-top {
+  color: var(--accent-gold);
+}
+
+.dance-step-card.step-completed .dance-step-top {
+  color: #4ade80;
+}
+
+.dance-step-main {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.dance-step-emoji {
+  font-size: 1.85rem;
+  line-height: 1;
+}
+
+.dance-step-name {
+  font-size: 1rem;
+  font-weight: 900;
+  color: #ffffff;
+}
+
+.dance-step-kanji {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.dance-step-hint {
+  font-size: 0.72rem;
+  color: #e2e8f0;
+  line-height: 1.3;
+}
+
+.dance-judgment-popup {
+  position: absolute;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 8;
+  padding: 10px 24px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #facc15, #f97316);
+  color: #090d16;
+  font-weight: 900;
+  font-size: 1.15rem;
+  letter-spacing: 0.06em;
+  box-shadow: 0 10px 30px rgba(250, 204, 21, 0.5);
+  animation: popJudgment 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.dance-judgment-popup.hidden {
+  display: none;
+}
+
+@keyframes popJudgment {
+  from {
+    transform: translateX(-50%) scale(0.6);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
+  }
+}
